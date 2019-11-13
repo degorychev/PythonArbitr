@@ -15,6 +15,7 @@ namespace python_orbitr
         
         static string path_to_python;
         static bool player = false;
+        static bool allOk = true;
         static void Main(string[] args)
         {
             path_to_python = PythonSearcher();
@@ -90,7 +91,8 @@ namespace python_orbitr
         }
         static string choise()
         {
-            player = !player;
+            if(allOk)
+                player = !player;
             if (player)
             {
                 Console.Write("PLAYER 1: ");
@@ -105,10 +107,27 @@ namespace python_orbitr
         }
         static string execute(string ishod, string command)
         {
+            allOk = true;
             if (command.Contains("SYMBOL"))
-                return ishod.Remove(ishod.IndexOf(command.Split()[0]), 1);
+            {
+                if (ishod.Contains(command.Split()[0]))
+                    return ishod.Remove(ishod.IndexOf(command.Split()[0]), 1);
+                else
+                {
+                    allOk = false;
+                    return ishod;
+                }
+            }
             else
-                return ishod.Replace(command.Split()[0], "");
+            {
+                if (ishod.Contains(command.Split()[0]))
+                    return ishod.Replace(command.Split()[0], "");
+                else
+                {
+                    allOk = false;
+                    return ishod;
+                }
+            }
         }
 
         static string PythonSearcher()
