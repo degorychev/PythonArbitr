@@ -25,14 +25,16 @@ namespace python_orbitr
                 Console.ReadLine();
                 return;
             }
-            int count_round = 30;
+            int count_round = 10;
             int p1 = 0;
             int p2 = 0;
+            string nachstr = generator_string(1, "This_is_start_string");
+            string old = nachstr;
             for (int i = 0; i < count_round; i++)
             {
-                //string nachstr = "This_is_start_string";
                 //string nachstr = Console.ReadLine().Replace(" ", "_");
-                string nachstr = generator_string();
+                nachstr = generator_string(i, old);
+                old = nachstr;
                 Console.WriteLine("СГЕНЕРИРОВАННАЯ СТРОКА: |" + nachstr + "| Длина:" + nachstr.Length);
 
                 Console.WriteLine("-----------------------------------------");
@@ -56,7 +58,10 @@ namespace python_orbitr
                     p2++;
                 }
                 Console.WriteLine("Счет: {0}|{1} (Партия №{2}/{3})", p1, p2, i + 1, count_round);
-                player = false;
+                if (i % 2 != 0)
+                    player = false;
+                else
+                    player = true;
                 Thread.Sleep(700);
                 Console.WriteLine("=========================================");
             }
@@ -71,8 +76,10 @@ namespace python_orbitr
 
         }
         private static Random random = new Random((int)DateTime.Now.Ticks);
-        static string generator_string()
+        static string generator_string(int a, string str)
         {
+            if (a % 2 != 0)
+                return str;
             var az = Enumerable.Range('a', 'z' - 'a' + 1).Select(i => (Char)i).ToList();
             az.AddRange(Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (Char)i).ToList());
             az.AddRange(Enumerable.Range('1', '9' - '1' + 1).Select(i => (Char)i).ToList());
@@ -91,17 +98,18 @@ namespace python_orbitr
         }
         static string choise()
         {
+            string dir = "programs/";
             if(allOk)
                 player = !player;
             if (player)
             {
                 Console.Write("PLAYER 1: ");
-                return "program1.py";
+                return dir+"losev.py";
             }
             else
             {
                 Console.Write("PLAYER 2: ");
-                return "program2.py";
+                return dir+"losev2.py";
             }
 
         }
@@ -132,6 +140,7 @@ namespace python_orbitr
 
         static string PythonSearcher()
         {
+            return @"C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe";
             string[] value = System.Environment.GetEnvironmentVariable("path").Split(';');
             foreach(string path in value)
             {
